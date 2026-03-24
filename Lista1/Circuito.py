@@ -14,6 +14,8 @@ class Circuito:
         self._incognitas = None # calculada no resolver por I = Y * V
         self._caracteristicas_rede = None
         self._valores_forcados = np.vstack([self._fonte, [0]])
+        self._tensoes_carga_fase = None
+        self._tensoes_linha = None
 
     def getFonte(self):
         return self._fonte
@@ -96,3 +98,20 @@ class Circuito:
             self._incognitas = np.dot(inversa, self._valores_forcados) # I = Y * V / I = [Ia, Ib, Ic, Vnn']
 
         return self._incognitas
+
+    def getTensoesFase(self):
+        self._tensoes_carga_fase = self._incognitas * self._carga
+
+        return self._tensoes_carga_fase
+    
+    def getTensoesNaLinha(self):
+        if np.array_equal(self._incognitas, None): raise ValueError("Correntes da linha ainda não foram calculadas. Execute .resolver_circuito() primeiro")
+
+        if np.array_equal(self._fonte, cte.FONTE1): self._tensoes_linha = self._incognitas * self._imp_prop # Vaa' = Ia * Zf
+        elif np.array_equal(self._fonte, cte.FONTE2): 
+            if self._nome == "G11" or self._nome == "G13" or self._nome == "G21" or self._nome == "G23": 
+                self._tensoes_linha = self._incognitas * (self._imp_prop - self._imp_mutua) # Vaa' = Ia * (Zf - Zm) : carga não aterrada
+            elif self._nome == "G12" or self._nome == "G22": 
+                self._tensoes_linha = self._incognitas * (self._imp_prop + 2 * self._imp_mutua) # Vaa' = Ia * (Zf + 2Zm) : carga aterrada
+
+        return self._tensoes_linha
