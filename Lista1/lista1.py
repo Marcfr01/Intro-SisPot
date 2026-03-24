@@ -29,7 +29,7 @@ for fonte, linha, carga in product(fontes, linhas, cargas):
 #for i in casos: print(i.getNome())
 
 # teste
-caso1 = Circuito(cte.FONTE1, cte.Z_P1, cte.Z1, "G11")
+caso1 = Circuito(cte.FONTE1, linha1, cte.Z1, "G11")
 caso1.tipos_parametros()
 teste1 = caso1.resolver_circuito()
 modulo1 = np.abs(teste1)
@@ -41,7 +41,7 @@ print(f"Ib:   {teste1[1]} = {modulo1[1][0]:.4f} ∠ {fase1[1][0]:.2f}°")
 print(f"Ic:   {teste1[2]} = {modulo1[2][0]:.4f} ∠ {fase1[2][0]:.2f}°")
 print(f"Vnn': {teste1[3]} = {modulo1[3][0]:.4f} ∠ {fase1[3][0]:.2f}°")
 
-caso2 = Circuito(cte.FONTE2, cte.Z_P1, cte.Z2, "G11")
+caso2 = Circuito(cte.FONTE2, linha1, cte.Z2, "G11")
 caso2.tipos_parametros()
 teste2 = caso2.resolver_circuito()
 modulo2 = np.abs(teste2)
