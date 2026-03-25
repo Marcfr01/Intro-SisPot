@@ -74,6 +74,6 @@ Z2 = 12 + 4 *1j
 #print(f'A impedância da carga 2 é: {Z2} [Ω]')
 #print()
 # Carga 3: ligação delta
-Z3 = 20
+Z3 = 20 / 3 # transformado em estrela
 #print(f'A impedância da carga 3 é: {Z3} [Ω]')
 #print()

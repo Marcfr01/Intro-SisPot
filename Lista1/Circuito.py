@@ -60,7 +60,6 @@ class Circuito:
             self._incognitas = np.dot(inversa, self._valores_forcados) # I = Y * V / I = [Ia, Ib, Ic, In]
 
         elif self._nome == "G13": # Linha sem mútua + carga trifásica em delta
-            self._carga = self._carga / 3
             self._caracteristicas_rede = np.array([ [self._imp_prop + self._carga, 0, 0, 1],
                                                     [0, self._imp_prop + self._carga, 0, 1],
                                                     [0, 0, self._imp_prop + self._carga, 1],
@@ -89,7 +88,6 @@ class Circuito:
 
         elif self._nome == "G23": # Linha com mútua + carga trifásica em delta
             self._linha_eq = self._imp_prop - self._imp_mutua
-            self._carga = self._carga / 3
             self._caracteristicas_rede = np.array([ [self._linha_eq + self._carga, 0, 0, 1],
                                                     [0, self._linha_eq + self._carga, 0, 1],
                                                     [0, 0, self._linha_eq + self._carga, 1],
@@ -127,8 +125,8 @@ class Circuito:
                 if np.array_equal(self._fonte, cte.FONTE1): f.write(f"Fonte: 1\n")
                 elif np.array_equal(self._fonte, cte.FONTE2): f.write(f"Fonte: 2\n")
 
-                if (self._imp_prop == cte.Z_P1): f.write(f'Linha: 1 | Z_p = {self._imp_prop}\n')
-                elif (self._imp_prop == cte.Z_P2): f.write(f'Linha: 2 | Z_p = {self._imp_prop} e Z_m = {self._imp_mutua}\n')
+                if (self._imp_prop == cte.Z_P1): f.write(f'Linha: 1 | Z_p = {self._imp_prop} [Ω]\n')
+                elif (self._imp_prop == cte.Z_P2): f.write(f'Linha: 2 | Z_p = {self._imp_prop} [Ω] e Z_m = {self._imp_mutua} [Ω]\n')
 
                 if   (self._carga == cte.Z1): f.write(f'Carga : 1 | Z_f = {self._carga} [Ω]\n')
                 elif (self._carga == cte.Z2): f.write(f'Carga : 2 | Z_f = {self._carga} [Ω]\n')

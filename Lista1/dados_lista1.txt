@@ -24,7 +24,8 @@ Vcc':   [-194.691-70.069j] = 206.9161 ∠ -160.21°
 ============= Dados referentes ao G13 =============
 Parâmetros: 
 Fonte: 1
-Linha: 1 | Z_p = (0.375+0.5j)
+Linha: 1 | Z_p = (0.375+0.5j) [Ω]
+Carga : 3 | Z_f = 6.666666666666667 [Ω]
 
 Resultados:
 1a.
