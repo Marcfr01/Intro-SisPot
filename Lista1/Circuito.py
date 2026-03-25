@@ -130,9 +130,9 @@ class Circuito:
                 if (self._imp_prop == cte.Z_P1): f.write(f'Linha: 1 | Z_p = {self._imp_prop}\n')
                 elif (self._imp_prop == cte.Z_P2): f.write(f'Linha: 2 | Z_p = {self._imp_prop} e Z_m = {self._imp_mutua}\n')
 
-                if (self._carga == cte.Z1): f.write(f'Carga : 1 | Z_f = {self._carga}\n')
-                elif (self._carga == cte.Z2): f.write(f'Carga : 2 | Z_f = {self._carga}\n')
-                elif (self._carga == cte.Z3): f.write(f'Carga : 3 | Z_f = {self._carga}\n')
+                if   (self._carga == cte.Z1): f.write(f'Carga : 1 | Z_f = {self._carga} [Ω]\n')
+                elif (self._carga == cte.Z2): f.write(f'Carga : 2 | Z_f = {self._carga} [Ω]\n')
+                elif (self._carga == cte.Z3): f.write(f'Carga : 3 | Z_f = {self._carga} [Ω]\n')
 
                 f.write("\nResultados:\n")
                 f.write("1a.\n")
@@ -144,13 +144,20 @@ class Circuito:
                 f.write(f"In:   {self._incognitas[3]} = {modulo[3][0]:.4f} ∠ {fase[3][0]:.2f}°\n")
 
                 f.write("\n1b.\n")
-                modulo3_c = np.abs(self._tensoes_carga_fase)
-                fase3_c = np.angle(self._tensoes_carga_fase, deg=True) 
+                
                 if self._nome == "G13" or self._nome == "G23":
+                    Va_temp = self._tensoes_carga_fase[0]
+                    Vb_temp = self._tensoes_carga_fase[1]
+                    Vc_temp = self._tensoes_carga_fase[2]
+                    self._tensoes_carga_fase = np.array([Va_temp - Vb_temp, Vb_temp - Vc_temp, Vc_temp - Va_temp])
+                    modulo3_c = np.abs(self._tensoes_carga_fase)
+                    fase3_c = np.angle(self._tensoes_carga_fase, deg=True) 
                     f.write(f"Vab:   {self._tensoes_carga_fase[0]} = {modulo3_c[0][0]:.4f} ∠ {fase3_c[0][0]:.2f}°\n")
                     f.write(f"Vbc:   {self._tensoes_carga_fase[1]} = {modulo3_c[1][0]:.4f} ∠ {fase3_c[1][0]:.2f}°\n")
                     f.write(f"Vca:   {self._tensoes_carga_fase[2]} = {modulo3_c[2][0]:.4f} ∠ {fase3_c[2][0]:.2f}°\n")
                 else:
+                    modulo3_c = np.abs(self._tensoes_carga_fase)
+                    fase3_c = np.angle(self._tensoes_carga_fase, deg=True) 
                     f.write(f"Van':   {self._tensoes_carga_fase[0]} = {modulo3_c[0][0]:.4f} ∠ {fase3_c[0][0]:.2f}°\n")
                     f.write(f"Vbn':   {self._tensoes_carga_fase[1]} = {modulo3_c[1][0]:.4f} ∠ {fase3_c[1][0]:.2f}°\n")
                     f.write(f"Vcn':   {self._tensoes_carga_fase[2]} = {modulo3_c[2][0]:.4f} ∠ {fase3_c[2][0]:.2f}°\n")
@@ -161,5 +168,6 @@ class Circuito:
                 f.write(f"Vaa':   {self._tensoes_linha[0]} = {modulo3_l[0][0]:.4f} ∠ {fase3_l[0][0]:.2f}°\n")
                 f.write(f"Vbb':   {self._tensoes_linha[1]} = {modulo3_l[1][0]:.4f} ∠ {fase3_l[1][0]:.2f}°\n")
                 f.write(f"Vcc':   {self._tensoes_linha[2]} = {modulo3_l[2][0]:.4f} ∠ {fase3_l[2][0]:.2f}°\n")
+                f.write("\n")
         except Exception as e:
             print("Erro ao salvar o arquivo", e)

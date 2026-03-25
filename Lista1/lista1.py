@@ -53,7 +53,7 @@ print(f"Ib:   {teste2[1]} = {modulo2[1][0]:.4f} ∠ {fase2[1][0]:.2f}°")
 print(f"Ic:   {teste2[2]} = {modulo2[2][0]:.4f} ∠ {fase2[2][0]:.2f}°")
 print(f"In:   {teste2[3]} = {modulo2[3][0]:.4f} ∠ {fase2[3][0]:.2f}°")
 
-caso3 = Circuito(cte.FONTE1, linha1, cte.Z1, "G11")
+caso3 = Circuito(cte.FONTE1, linha1, cte.Z3, "G13")
 caso3.tipos_parametros()
 teste3 = caso3.resolver_circuito()
 modulo3 = np.abs(teste3)
