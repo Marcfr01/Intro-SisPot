@@ -100,6 +100,7 @@ class Circuito:
         return self._incognitas
 
     def getTensoesFase(self):
+        if np.array_equal(self._incognitas, None): raise ValueError("Correntes da linha ainda não foram calculadas. Execute .resolver_circuito() primeiro")
         self._tensoes_carga_fase = self._incognitas * self._carga
 
         return self._tensoes_carga_fase
