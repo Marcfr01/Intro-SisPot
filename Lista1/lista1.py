@@ -82,3 +82,5 @@ print("\n Tensões de Linha teste 3:")
 print(f"Vaa':   {tensoes_linha[0]} = {modulo3_l[0][0]:.4f} ∠ {fase3_l[0][0]:.2f}°")
 print(f"Vbb':   {tensoes_linha[1]} = {modulo3_l[1][0]:.4f} ∠ {fase3_l[1][0]:.2f}°")
 print(f"Vcc':   {tensoes_linha[2]} = {modulo3_l[2][0]:.4f} ∠ {fase3_l[2][0]:.2f}°")
+
+caso3.salvar_dados("dados_lista1.txt")
