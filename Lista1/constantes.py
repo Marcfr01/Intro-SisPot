@@ -28,12 +28,12 @@ SEQ_NEG = np.array([[1],
 # Fonte 1: sequencia positiva, em estrela e V_an = 6350 ∠ 10
 V1 = complex(6350 * np.cos(np.deg2rad(10)), 6350 * np.sin(np.deg2rad(10)))
 FONTE1 = V1 * SEQ_POS
-print('A matriz que determina a fonte 1 é: ')
-print(FONTE1)
-print()
-print(f'A tensão V_an da fonte 1 é: {FONTE1[0]} [V]')
-print(f'A tensão V_bn da fonte 1 é: {FONTE1[1]} [V]')
-print(f'A tensão V_cn da fonte 1 é: {FONTE1[2]} [V]')
+#print('A matriz que determina a fonte 1 é: ')
+#print(FONTE1)
+#print()
+#print(f'A tensão V_an da fonte 1 é: {FONTE1[0]} [V]')
+#print(f'A tensão V_bn da fonte 1 é: {FONTE1[1]} [V]')
+#print(f'A tensão V_cn da fonte 1 é: {FONTE1[2]} [V]')
 #print()
 
 # Fonte 2: sequencia negativa, em delta e V_ab = 13800 ∠ 50
@@ -66,11 +66,11 @@ Z_M2 = (0.09 * 1j) * L2
 
 # Impedância por Fase
 # Carga 1: ligação estrela isolada
-Z1 = 18 - 6 *1j
+Z1 = 18 + 6 *1j
 #print(f'A impedância da carga 1 é: {Z1} [Ω]')
 #print()
 # Carga 2: ligação estrela aterrada
-Z2 = 12 + 4 *1j
+Z2 = 12 - 4 *1j
 #print(f'A impedância da carga 2 é: {Z2} [Ω]')
 #print()
 # Carga 3: ligação delta

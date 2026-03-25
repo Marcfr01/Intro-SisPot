@@ -26,8 +26,10 @@ for fonte, linha, carga in product(fontes, linhas, cargas):
     c = Circuito(fonte, linha, carga, f"G{linhas.index(linha) + 1}{cargas.index(carga) + 1}")
     casos.append(c)
 
-#for i in casos: print(i.getNome())
-
+for i in casos:
+    i.resolver_circuito()
+    i.salvar_dados("dados_lista1.txt")
+''''
 # teste
 caso1 = Circuito(cte.FONTE1, linha1, cte.Z1, "G11")
 caso1.tipos_parametros()
@@ -83,4 +85,4 @@ print(f"Vaa':   {tensoes_linha[0]} = {modulo3_l[0][0]:.4f} ∠ {fase3_l[0][0]:.2
 print(f"Vbb':   {tensoes_linha[1]} = {modulo3_l[1][0]:.4f} ∠ {fase3_l[1][0]:.2f}°")
 print(f"Vcc':   {tensoes_linha[2]} = {modulo3_l[2][0]:.4f} ∠ {fase3_l[2][0]:.2f}°")
 
-caso3.salvar_dados("dados_lista1.txt")
+caso3.salvar_dados("dados_lista1.txt")'''

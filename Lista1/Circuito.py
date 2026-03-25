@@ -99,19 +99,16 @@ class Circuito:
 
     def getTensoesFase(self):
         if np.array_equal(self._incognitas, None): raise ValueError("Correntes da linha ainda não foram calculadas. Execute .resolver_circuito() primeiro")
-        self._tensoes_carga_fase = self._incognitas * self._carga
+        self._tensoes_carga_fase = self._incognitas[:3] * self._carga
 
         return self._tensoes_carga_fase
     
     def getTensoesNaLinha(self):
         if np.array_equal(self._incognitas, None): raise ValueError("Correntes da linha ainda não foram calculadas. Execute .resolver_circuito() primeiro")
 
-        if np.array_equal(self._fonte, cte.FONTE1): self._tensoes_linha = self._incognitas * self._imp_prop # Vaa' = Ia * Zf
-        elif np.array_equal(self._fonte, cte.FONTE2): 
-            if self._nome == "G11" or self._nome == "G13" or self._nome == "G21" or self._nome == "G23": 
-                self._tensoes_linha = self._incognitas * (self._imp_prop - self._imp_mutua) # Vaa' = Ia * (Zf - Zm) : carga não aterrada
-            elif self._nome == "G12" or self._nome == "G22": 
-                self._tensoes_linha = self._incognitas * (self._imp_prop + 2 * self._imp_mutua) # Vaa' = Ia * (Zf + 2Zm) : carga aterrada
+        if self._nome in ["G11", "G12", "G13"]: self._tensoes_linha = self._incognitas * self._imp_prop # Vaa' = Ia * Zf
+        elif self._nome in ["G21", "G23"]: self._tensoes_linha = self._incognitas[:3] * (self._imp_prop - self._imp_mutua) # Vaa' = Ia * (Zf - Zm) : carga não aterrada      
+        elif self._nome == "G22": self._tensoes_linha = self._incognitas[:3] * (self._imp_prop + 2 * self._imp_mutua) # Vaa' = Ia * (Zf + 2Zm) : carga aterrada
 
         return self._tensoes_linha
     
@@ -142,18 +139,19 @@ class Circuito:
                 f.write(f"In:   {self._incognitas[3]} = {modulo[3][0]:.4f} ∠ {fase[3][0]:.2f}°\n")
 
                 f.write("\n1b.\n")
-                
                 if self._nome == "G13" or self._nome == "G23":
+                    self.getTensoesFase()
                     Va_temp = self._tensoes_carga_fase[0]
                     Vb_temp = self._tensoes_carga_fase[1]
                     Vc_temp = self._tensoes_carga_fase[2]
-                    self._tensoes_carga_fase = np.array([Va_temp - Vb_temp, Vb_temp - Vc_temp, Vc_temp - Va_temp])
-                    modulo3_c = np.abs(self._tensoes_carga_fase)
-                    fase3_c = np.angle(self._tensoes_carga_fase, deg=True) 
-                    f.write(f"Vab:   {self._tensoes_carga_fase[0]} = {modulo3_c[0][0]:.4f} ∠ {fase3_c[0][0]:.2f}°\n")
-                    f.write(f"Vbc:   {self._tensoes_carga_fase[1]} = {modulo3_c[1][0]:.4f} ∠ {fase3_c[1][0]:.2f}°\n")
-                    f.write(f"Vca:   {self._tensoes_carga_fase[2]} = {modulo3_c[2][0]:.4f} ∠ {fase3_c[2][0]:.2f}°\n")
+                    self._tensoes_carga_fase1 = np.array([Va_temp - Vb_temp, Vb_temp - Vc_temp, Vc_temp - Va_temp])
+                    modulo3_c = np.abs(self._tensoes_carga_fase1)
+                    fase3_c = np.angle(self._tensoes_carga_fase1, deg=True) 
+                    f.write(f"Vab:   {self._tensoes_carga_fase1[0]} = {modulo3_c[0][0]:.4f} ∠ {fase3_c[0][0]:.2f}°\n")
+                    f.write(f"Vbc:   {self._tensoes_carga_fase1[1]} = {modulo3_c[1][0]:.4f} ∠ {fase3_c[1][0]:.2f}°\n")
+                    f.write(f"Vca:   {self._tensoes_carga_fase1[2]} = {modulo3_c[2][0]:.4f} ∠ {fase3_c[2][0]:.2f}°\n")
                 else:
+                    self.getTensoesFase()
                     modulo3_c = np.abs(self._tensoes_carga_fase)
                     fase3_c = np.angle(self._tensoes_carga_fase, deg=True) 
                     f.write(f"Van':   {self._tensoes_carga_fase[0]} = {modulo3_c[0][0]:.4f} ∠ {fase3_c[0][0]:.2f}°\n")
@@ -161,6 +159,7 @@ class Circuito:
                     f.write(f"Vcn':   {self._tensoes_carga_fase[2]} = {modulo3_c[2][0]:.4f} ∠ {fase3_c[2][0]:.2f}°\n")
 
                 f.write("\n1c.\n")
+                self.getTensoesNaLinha()
                 modulo3_l = np.abs(self._tensoes_linha)
                 fase3_l = np.angle(self._tensoes_linha, deg=True) 
                 f.write(f"Vaa':   {self._tensoes_linha[0]} = {modulo3_l[0][0]:.4f} ∠ {fase3_l[0][0]:.2f}°\n")
