@@ -4,13 +4,6 @@ import constantes as cte
 import numpy as np
 from itertools import product
 
-def imprimir_vetor_polar(vetor):
-    modulo = np.abs(vetor)
-    fase = np.angle(vetor, deg=True)  # Converte fase para graus
-    
-    for i in range(len(vetor)):
-        print(f"   {modulo[i][0]:.4f} ∠ {fase[i][0]:.2f}°")
-
 # Instancia as linhas de transmissão
 linha1 = Linha(cte.L1, cte.Z_P1, None)
 linha2 = Linha(cte.L2, cte.Z_P2, cte.Z_M2)
