@@ -5,49 +5,34 @@ import math
 
 class Circuito: 
     # Questão 1.
-    def __init__(self, fonte, linha : Linha, carga, nome):
+    def __init__(self, fonte, linha: Linha, cargas, nome):
         self._fonte = fonte
         self._imp_prop = linha.getImp_prop()
         self._imp_mutua = linha.getImp_mutua()
-        self._carga = carga
+        self._cargas = cargas # Recebe uma lista de cargas
         self._nome = nome
 
+        self._carga = cargas[0]
         self._incognitas = None # calculada no resolver por I = Y * V
-        self._caracteristicas_rede = None
-        self._valores_forcados = np.vstack([self._fonte, [0]])
+        self._caracteristicas_rede = None # Matriz das impedâncias
+        self._valores_forcados = np.vstack([self._fonte, [0]]) # Vetor com tensões provenientes da 2 Lei de Kirchhoff
         self._tensoes_carga_fase = None
         self._tensoes_linha = None
 
-    # Questão 2 circuitos I e II.
-    def __init__(self, fonte, linha: Linha, carga1, carga2, nome):
-        self._fonte = fonte
-        self._imp_prop = linha.getImp_prop()
-        self._imp_mutua = linha.getImp_mutua()
-        self._carga1 = carga1
-        self._carga2 = carga2
-        self._nome = nome
+    # "Construtor" para a Questão 1
+    @classmethod
+    def questao_1(cls, fonte, linha, carga, nome):
+        return cls(fonte, linha, [carga], nome)
 
-        self._incognitas = None                                 # calculada no resolver por I = Y * V
-        self._caracteristicas_rede = None                       # Matriz das impedâncias
-        self._valores_forcados = np.vstack([self._fonte, [0]])  # Vetor com tensões provenientes da 2 Lei de Kirchhoff
-        self._tensoes_carga_fase = None
-        self._tensoes_linha = None
+    # "Construtor" para a Questão 2 (Circuitos I e II)
+    @classmethod
+    def questao_2_cI_cII(cls, fonte, linha, carga1, carga2, nome):
+        return cls(fonte, linha, [carga1, carga2], nome)
 
-    # Questão 2 circuito III.
-    def __init__(self, fonte, linha: Linha, carga1, carga2, carga3, nome):
-        self._fonte = fonte
-        self._imp_prop = linha.getImp_prop()
-        self._imp_mutua = linha.getImp_mutua()
-        self._carga1 = carga1
-        self._carga2 = carga2
-        self._carga3 = carga3
-        self._nome = nome
-
-        self._incognitas = None                                 # calculada no resolver por I = Y * V
-        self._caracteristicas_rede = None                       # Matriz das impedâncias
-        self._valores_forcados = np.vstack([self._fonte, [0]])  # Vetor com tensões provenientes da 2 Lei de Kirchhoff
-        self._tensoes_carga_fase = None
-        self._tensoes_linha = None
+    # "Construtor" para a Questão 2 (Circuito III)
+    @classmethod
+    def questao_2_cIII(cls, fonte, linha, carga1, carga2, carga3, nome):
+        return cls(fonte, linha, [carga1, carga2, carga3], nome)
 
 
     def get_fonte(self):
@@ -57,10 +42,13 @@ class Circuito:
         return self._imp_prop
     
     def get_carga(self):
-        return self._carga
+        return self._cargas[0]
     
     def get_nome(self):
         return self._nome
+    
+    def get_incognitas(self):
+        return self._incognitas
     
     
     def get_carga1(self):
@@ -150,6 +138,8 @@ class Circuito:
     
     def resolver_cargas_paralelas(self):
         if self._nome == "2.I":
+            self._carga1 = self._cargas[0]
+            self._carga2 = self._cargas[1]
             self._Zeq = (self._carga1 * self._carga2) / (self._carga1 + self._carga2)
             self._caracteristicas_rede = np.array([ [self._imp_prop + self._Zeq, 0, 0, 1], 
                                                     [0, self._imp_prop + self._Zeq, 0, 1],
@@ -159,6 +149,8 @@ class Circuito:
             self._incognitas = np.dot(inversa, self._valores_forcados) # I = Y * V | I = [Ia, Ib, Ic, Vnn_eq]
         
         elif self._nome == "2.II":
+            self._carga1 = self._cargas[0]
+            self._carga2 = self._cargas[1]
             self._linha_eq = self._imp_prop - self._imp_mutua
             self._Zeq = (self._carga1 * self._carga2) / (self._carga1 + self._carga2)
             self._caracteristicas_rede = np.array([ [self._imp_prop + self._Zeq, self._imp_mutua, self._imp_mutua, 1], 
@@ -169,6 +161,9 @@ class Circuito:
             self._incognitas = np.dot(inversa, self._valores_forcados) # I = Y * V | I = [Ia, Ib, Ic, Vnn_eq]
 
         elif self._nome == "2.III":
+            self._carga1 = self._cargas[0]
+            self._carga2 = self._cargas[1]
+            self._carga3 = self._cargas[2]
             self._Zeq = 1 / ((1/self.carga1) + (1/self.carga2) + (1/self.carga3))
             self._caracteristicas_rede = np.array([ [self._imp_prop + self._Zeq, self._imp_mutua, self._imp_mutua, 0], 
                                                     [self._imp_mutua, self._imp_prop + self._Zeq, self._imp_mutua, 0],
