@@ -37,7 +37,7 @@ FONTE1 = V1 * SEQ_POS
 #print()
 
 # Fonte 2: sequencia negativa, em delta e V_ab = 13800 ∠ 50
-V2 = complex((13800 / math.sqrt(3)) * np.cos(np.deg2rad(50 - 30)), (13800 / math.sqrt(3)) * np.sin(np.deg2rad(50 - 30)))
+V2 = complex((13800 / math.sqrt(3)) * np.cos(np.deg2rad(50 - 30)), (13800 / math.sqrt(3)) * np.sin(np.deg2rad(50 - 30))) # já transformada em estrela
 FONTE2 = V2 * SEQ_NEG
 #print('A matriz que determina a fonte 2 é: ')
 #print(FONTE2)
