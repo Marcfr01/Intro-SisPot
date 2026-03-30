@@ -3,6 +3,7 @@ from Linha import Linha
 import constantes as cte
 import numpy as np
 from itertools import product
+import pandas as pd
 
 # Instancia as linhas de transmissão
 linha1 = Linha(cte.L1, cte.Z_P1, None)
@@ -34,14 +35,9 @@ for i in casos: del i # limpa o vetor casos
 
 casos.append(Circuito.questao_2_cI_cII(fonte= fontes[0], linha= linhas[0], carga1= cargas[0], carga2= cargas[2], nome= "2.I")) 
 casos[0].resolver_cargas_paralelas()
-teste0 = casos[0].get_incognitas()
-modulo0 = np.abs(teste0)
-fase0 = np.angle(teste0, deg=True) 
-print(f"Ia:   {teste0[0]} = {modulo0[0][0]:.4f} ∠ {fase0[0][0]:.2f}°")
-print(f"Ib:   {teste0[1]} = {modulo0[1][0]:.4f} ∠ {fase0[1][0]:.2f}°")
-print(f"Ic:   {teste0[2]} = {modulo0[2][0]:.4f} ∠ {fase0[2][0]:.2f}°")
-print(f"Vnn': {teste0[3]} = {modulo0[3][0]:.4f} ∠ {fase0[3][0]:.2f}°")
-print("\n\n")
+circuito_I = casos[0].get_incognitas()
+modulo0 = np.abs(circuito_I)
+fase0 = np.angle(circuito_I, deg=True) 
 
 #                                            ----- carga 1
 # Circiuito II: fonte 2 ----- linha 2 ----- |
@@ -49,14 +45,9 @@ print("\n\n")
 
 casos.append(Circuito.questao_2_cI_cII(fonte= fontes[1], linha= linhas[1], carga1= cargas[0], carga2= cargas[2], nome= "2.II")) 
 casos[1].resolver_cargas_paralelas()
-teste1 = casos[1].get_incognitas()
-modulo1 = np.abs(teste1)
-fase1 = np.angle(teste1, deg=True) 
-print(f"Ia:   {teste1[0]} = {modulo1[0][0]:.4f} ∠ {fase1[0][0]:.2f}°")
-print(f"Ib:   {teste1[1]} = {modulo1[1][0]:.4f} ∠ {fase1[1][0]:.2f}°")
-print(f"Ic:   {teste1[2]} = {modulo1[2][0]:.4f} ∠ {fase1[2][0]:.2f}°")
-print(f"Vnn': {teste1[3]} = {modulo1[3][0]:.4f} ∠ {fase1[3][0]:.2f}°")
-print("\n\n")
+circuito_II = casos[1].get_incognitas()
+modulo1 = np.abs(circuito_II)
+fase1 = np.angle(circuito_II, deg=True) 
 
 #                                             ----- carga 1
 # Circiuito III: fonte 1 ----- linha 2 ----- |----- carga 2
@@ -64,11 +55,43 @@ print("\n\n")
 
 casos.append(Circuito.questao_2_cIII(fonte= fontes[0], linha= linhas[0], carga1= cargas[0], carga2= cargas[1], carga3= cargas[2], nome = "2.III")) 
 casos[2].resolver_cargas_paralelas()
-teste2 = casos[2].get_incognitas()
-modulo2 = np.abs(teste2)
-fase2 = np.angle(teste2, deg=True) 
-print(f"Ia:   {teste2[0]} = {modulo2[0][0]:.4f} ∠ {fase2[0][0]:.2f}°")
-print(f"Ib:   {teste2[1]} = {modulo2[1][0]:.4f} ∠ {fase2[1][0]:.2f}°")
-print(f"Ic:   {teste2[2]} = {modulo2[2][0]:.4f} ∠ {fase2[2][0]:.2f}°")
-print(f"Vnn': {teste2[3]} = {modulo2[3][0]:.4f} ∠ {fase2[3][0]:.2f}°")
-print("\n\n")
+circuito_III = casos[2].get_incognitas()
+modulo2 = np.abs(circuito_III)
+fase2 = np.angle(circuito_III, deg=True) 
+
+questao2 = pd.DataFrame(columns=["Circuito I", "Circuito II", "Circuito III"], index= ["Ia", "Ib", "Ic", "Vnn / In"])
+m0_flat = np.array(modulo0).flatten()
+f0_flat = np.array(fase0).flatten()
+
+m1_flat = np.array(modulo1).flatten()
+f1_flat = np.array(fase1).flatten()
+
+m2_flat = np.array(modulo2).flatten()
+f2_flat = np.array(fase2).flatten()
+
+questao2["Circuito I"]   = [f"{m:.4f} ∠ {f:.2f}°" for m, f in zip(m0_flat, f0_flat)]
+questao2["Circuito II"]  = [f"{m:.4f} ∠ {f:.2f}°" for m, f in zip(m1_flat, f1_flat)]
+questao2["Circuito III"] = [f"{m:.4f} ∠ {f:.2f}°" for m, f in zip(m2_flat, f2_flat)]
+
+print("\n",questao2["Circuito I"])
+print("\n",questao2["Circuito II"])
+print("\n",questao2["Circuito III"])
+print()
+
+modulo0_l = np.abs(casos[0].get_tensoes_linha())
+fase0_l = np.angle(casos[0].get_tensoes_linha(), deg= True)
+print(f"Vaa':   {casos[0].get_tensoes_linha()[0]} = {modulo0_l[0][0]:.4f} ∠ {fase0_l[0][0]:.2f}°")
+print(f"Vbb':   {casos[0].get_tensoes_linha()[1]} = {modulo0_l[1][0]:.4f} ∠ {fase0_l[1][0]:.2f}°")
+print(f"Vcc':   {casos[0].get_tensoes_linha()[2]} = {modulo0_l[2][0]:.4f} ∠ {fase0_l[2][0]:.2f}°\n")
+
+modulo1_l = np.abs(casos[1].get_tensoes_linha())
+fase1_l = np.angle(casos[1].get_tensoes_linha(), deg= True)
+print(f"Vaa':   {casos[1].get_tensoes_linha()[0]} = {modulo1_l[0][0]:.4f} ∠ {fase1_l[0][0]:.2f}°")
+print(f"Vbb':   {casos[1].get_tensoes_linha()[1]} = {modulo1_l[1][0]:.4f} ∠ {fase1_l[1][0]:.2f}°")
+print(f"Vcc':   {casos[1].get_tensoes_linha()[2]} = {modulo1_l[2][0]:.4f} ∠ {fase1_l[2][0]:.2f}°\n")
+
+modulo2_l = np.abs(casos[2].get_tensoes_linha())
+fase2_l = np.angle(casos[2].get_tensoes_linha(), deg= True)
+print(f"Vaa':   {casos[2].get_tensoes_linha()[0]} = {modulo2_l[0][0]:.4f} ∠ {fase2_l[0][0]:.2f}°")
+print(f"Vbb':   {casos[2].get_tensoes_linha()[1]} = {modulo2_l[1][0]:.4f} ∠ {fase2_l[1][0]:.2f}°")
+print(f"Vcc':   {casos[2].get_tensoes_linha()[2]} = {modulo2_l[2][0]:.4f} ∠ {fase2_l[2][0]:.2f}°\n")

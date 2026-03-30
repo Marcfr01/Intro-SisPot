@@ -34,6 +34,19 @@ class Circuito:
     def questao_2_cIII(cls, fonte, linha, carga1, carga2, carga3, nome):
         return cls(fonte, linha, [carga1, carga2, carga3], nome)
 
+    def __del__(self):
+        self._fonte = None
+        self._imp_prop = None
+        self._imp_mutua = None
+        self._cargas = None
+        self._nome = None
+
+        self._carga = None
+        self._incognitas = None # calculada no resolver por I = Y * V
+        self._caracteristicas_rede = None # Matriz das impedâncias
+        self._valores_forcados = None
+        self._tensoes_carga_fase = None
+        self._tensoes_linha = None
 
     def get_fonte(self):
         return self._fonte
@@ -164,7 +177,7 @@ class Circuito:
             self._carga1 = self._cargas[0]
             self._carga2 = self._cargas[1]
             self._carga3 = self._cargas[2]
-            self._Zeq = 1 / ((1/self.carga1) + (1/self.carga2) + (1/self.carga3))
+            self._Zeq = 1 / ((1/self._carga1) + (1/self._carga2) + (1/self._carga3))
             self._caracteristicas_rede = np.array([ [self._imp_prop + self._Zeq, self._imp_mutua, self._imp_mutua, 0], 
                                                     [self._imp_mutua, self._imp_prop + self._Zeq, self._imp_mutua, 0],
                                                     [self._imp_mutua, self._imp_mutua, self._imp_prop + self._Zeq, 0],
