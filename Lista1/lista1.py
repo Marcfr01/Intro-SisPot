@@ -25,21 +25,26 @@ for i in casos:
     i.resolver_circuito()
     i.salvar_dados("dados_lista1.txt")
 
+casos.clear() # limpa o vetor de casos para o próximo exercício
+
 # ============= Questão 2. =============
 #                                           ----- carga 1
 # Circiuito I: fonte 1 ----- linha 1 ----- |
 #                                           ----- carga 3
 
 casos.append(Circuito(fonte= fontes[0], linha= linhas[0], carga1= cargas[0], carga2= cargas[2], nome= "2.I")) 
+casos[0].resolver_cargas_paralelas()
 
 #                                            ----- carga 1
 # Circiuito II: fonte 2 ----- linha 2 ----- |
 #                                            ----- carga 3
 
 casos.append(Circuito(fonte= fontes[1], linha= linhas[1], carga1= cargas[0], carga2= cargas[2], nome= "2.II")) 
+casos[1].resolver_cargas_paralelas()
 
 #                                             ----- carga 1
 # Circiuito III: fonte 1 ----- linha 2 ----- |----- carga 2
 #                                             ----- carga 3
 
 casos.append(Circuito(fonte= fontes[0], linha= linhas[0], carga1= cargas[0], carga2= cargas[1], carga3= cargas[2], nome = "2.III")) 
+casos[2].resolver_cargas_paralelas()
