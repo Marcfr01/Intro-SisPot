@@ -4,6 +4,7 @@ import numpy as np
 import math
 
 class Circuito: 
+    # Questão 1.
     def __init__(self, fonte, linha : Linha, carga, nome):
         self._fonte = fonte
         self._imp_prop = linha.getImp_prop()
@@ -14,6 +15,35 @@ class Circuito:
         self._incognitas = None # calculada no resolver por I = Y * V
         self._caracteristicas_rede = None
         self._valores_forcados = np.vstack([self._fonte, [0]])
+        self._tensoes_carga_fase = None
+        self._tensoes_linha = None
+
+    # Questão 2a e 2b.
+    def __init__(self, fonte, linha: Linha, carga1, carga2):
+        self._fonte = fonte
+        self._imp_prop = linha.getImp_prop()
+        self._imp_mutua = linha.getImp_mutua()
+        self._carga1 = carga1
+        self._carga2 = carga2
+
+        self._incognitas = None                                 # calculada no resolver por I = Y * V
+        self._caracteristicas_rede = None                       # Matriz das impedâncias
+        self._valores_forcados = np.vstack([self._fonte, [0]])  # Vetor com tensões provenientes da 2 Lei de Kirchhoff
+        self._tensoes_carga_fase = None
+        self._tensoes_linha = None
+
+    # Questão 2c.
+    def __init__(self, fonte, linha: Linha, carga1, carga2, carga3):
+        self._fonte = fonte
+        self._imp_prop = linha.getImp_prop()
+        self._imp_mutua = linha.getImp_mutua()
+        self._carga1 = carga1
+        self._carga2 = carga2
+        self._carga3 = carga3
+
+        self._incognitas = None                                 # calculada no resolver por I = Y * V
+        self._caracteristicas_rede = None                       # Matriz das impedâncias
+        self._valores_forcados = np.vstack([self._fonte, [0]])  # Vetor com tensões provenientes da 2 Lei de Kirchhoff
         self._tensoes_carga_fase = None
         self._tensoes_linha = None
 
