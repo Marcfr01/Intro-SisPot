@@ -142,6 +142,10 @@ class Circuito:
         elif self._nome in ["G21", "G23"]: self._tensoes_linha = self._incognitas[:3] * (self._imp_prop - self._imp_mutua) # Vaa' = Ia * (Zf - Zm) : carga não aterrada      
         elif self._nome == "G22": self._tensoes_linha = self._incognitas[:3] * (self._imp_prop + 2 * self._imp_mutua) # Vaa' = Ia * (Zf + 2Zm) : carga aterrada
 
+        if self._nome == "2.I": self._tensoes_linha = self._incognitas * self._imp_prop # Vaa' = Ia * Zf
+        elif self._nome == "2.II": self._tensoes_linha = self._incognitas[:3] * (self._imp_prop - self._imp_mutua) # Vaa' = Ia * (Zf - Zm) : carga não aterrada
+        elif self._nome == "2.III": self._tensoes_linha = self._incognitas[:3] * (self._imp_prop + 2 * self._imp_mutua) # Vaa' = Ia * (Zf + 2Zm) : carga aterrada
+
         return self._tensoes_linha
     
     def resolver_cargas_paralelas(self):
