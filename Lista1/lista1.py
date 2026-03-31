@@ -17,23 +17,23 @@ cargas = [cte.Z1, cte.Z2, cte.Z3]
 casos = []
 
 # ============= Questão 1. ============= 
-
+'''
 for fonte, linha, carga in product(fontes, linhas, cargas):
     c = Circuito.questao_1(fonte= fonte, linha= linha, carga= carga, nome= f"G{linhas.index(linha) + 1}{cargas.index(carga) + 1}")
     casos.append(c)
 
 for i in casos:
     i.resolver_circuito()
-    #i.salvar_dados("dados_lista1.txt")
+    #i.salvar_dados_q1("dados_lista1.txt")
 
-for i in casos: del i # limpa o vetor casos
+for i in casos: del i # limpa o vetor casos'''
 
 # ============= Questão 2. =============
 #                                           ----- carga 1
 # Circiuito I: fonte 1 ----- linha 1 ----- |
-#                                           ----- carga 3
+#                                           ----- carga 2
 
-casos.append(Circuito.questao_2_cI_cII(fonte= fontes[0], linha= linhas[0], carga1= cargas[0], carga2= cargas[2], nome= "2.I")) 
+casos.append(Circuito.questao_2_cI_cII(fonte= fontes[0], linha= linhas[0], carga1= cargas[0], carga2= cargas[1], nome= "2.I")) 
 casos[0].resolver_cargas_paralelas()
 circuito_I = casos[0].get_incognitas()
 modulo0 = np.abs(circuito_I)
@@ -53,12 +53,15 @@ fase1 = np.angle(circuito_II, deg=True)
 # Circiuito III: fonte 1 ----- linha 2 ----- |----- carga 2
 #                                             ----- carga 3
 
-casos.append(Circuito.questao_2_cIII(fonte= fontes[0], linha= linhas[0], carga1= cargas[0], carga2= cargas[1], carga3= cargas[2], nome = "2.III")) 
+casos.append(Circuito.questao_2_cIII(fonte= fontes[0], linha= linhas[1], carga1= cargas[0], carga2= cargas[1], carga3= cargas[2], nome = "2.III")) 
 casos[2].resolver_cargas_paralelas()
 circuito_III = casos[2].get_incognitas()
 modulo2 = np.abs(circuito_III)
 fase2 = np.angle(circuito_III, deg=True) 
 
+for i in casos:
+    i.salvar_dados_q2("dados_lista1_q2")
+'''
 questao2 = pd.DataFrame(columns=["Circuito I", "Circuito II", "Circuito III"], index= ["Ia", "Ib", "Ic", "Vnn / In"])
 m0_flat = np.array(modulo0).flatten()
 f0_flat = np.array(fase0).flatten()
@@ -95,3 +98,4 @@ fase2_l = np.angle(casos[2].get_tensoes_linha(), deg= True)
 print(f"Vaa':   {casos[2].get_tensoes_linha()[0]} = {modulo2_l[0][0]:.4f} ∠ {fase2_l[0][0]:.2f}°")
 print(f"Vbb':   {casos[2].get_tensoes_linha()[1]} = {modulo2_l[1][0]:.4f} ∠ {fase2_l[1][0]:.2f}°")
 print(f"Vcc':   {casos[2].get_tensoes_linha()[2]} = {modulo2_l[2][0]:.4f} ∠ {fase2_l[2][0]:.2f}°\n")
+'''
