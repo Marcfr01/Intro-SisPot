@@ -48,6 +48,10 @@ FONTE2_DELTA = complex((13800) * np.cos(np.deg2rad(50)), (13800) * np.sin(np.deg
 #print(f'A tensão V_cn da fonte 2 é: {FONTE2[2]} [V]')
 #print()
 
+# Fonte 3: sequencia positiva, em estrela e V_an = 6600 ∠ 15
+V3 = complex(6600 * np.cos(np.deg2rad(15)), 6600 * np.sin(np.deg2rad(15)))
+FONTE3 = V3 * SEQ_POS
+
 # Linhas 
 # Linha 1: sem mútuas
 L1 = 2.5 
