@@ -389,17 +389,16 @@ class Circuito3:
                 f.write("Quedas de tensão na linha 2:\n")
                 v2 = circuito_3[4:7] * (self._imp_prop2 - self._imp_mutua2)
                 modulo_v2 = np.abs(v1)
-                fase_v2 = np.angle(v1, deg=True)
                 f.write(f"Vaa'':    {v2[0]} = {modulo_v2[0][0]:.4f} \n")
                 f.write(f"Vbb'':    {v2[1]} = {modulo_v2[1][0]:.4f} \n")
                 f.write(f"Vcc'':    {v2[2]} = {modulo_v2[2][0]:.4f} \n")
 
                 f.write("\n3.c\n")
                 vc = (circuito_3[0:3] - circuito_3[4:7]) * self._carga
-                modulo_cv = np.abs(vc)
-                fase_cv = np.angle(vc, deg=True)
-                f.write(f"Vfa''n'':   {vc[0]} = {modulo_cv[0][0]:.4f} ∠ {fase_cv[0][0]:.2f}°\n")
-                f.write(f"Vfb''n'':   {vc[1]} = {modulo_cv[1][0]:.4f} ∠ {fase_cv[1][0]:.2f}°\n")
-                f.write(f"Vfc''n'':   {vc[2]} = {modulo_cv[2][0]:.4f} ∠ {fase_cv[2][0]:.2f}°\n")
+                modulo_vc = np.abs(vc)
+                fase_vc = np.angle(vc, deg=True)
+                f.write(f"Vfa''n'':   {vc[0]} = {modulo_vc[0][0]:.4f} ∠ {fase_vc[0][0]:.2f}°\n")
+                f.write(f"Vfb''n'':   {vc[1]} = {modulo_vc[1][0]:.4f} ∠ {fase_vc[1][0]:.2f}°\n")
+                f.write(f"Vfc''n'':   {vc[2]} = {modulo_vc[2][0]:.4f} ∠ {fase_vc[2][0]:.2f}°\n")
         except Exception as e:
             print("Erro ao salvar o arquivo: ", e)
