@@ -1,4 +1,4 @@
-from Circuito import Circuito
+from Circuito import Circuito, Circuito3
 from Linha import Linha
 import constantes as cte
 import numpy as np
@@ -10,11 +10,12 @@ linha1 = Linha(cte.L1, cte.Z_P1, None)
 linha2 = Linha(cte.L2, cte.Z_P2, cte.Z_M2)
 
 # Instancia os circuitos com base nos grupos definidos anteriormente
-fontes = [cte.FONTE1, cte.FONTE2]
+fontes = [cte.FONTE1, cte.FONTE2, cte.FONTE3]
 linhas = [linha1, linha2]
 cargas = [cte.Z1, cte.Z2, cte.Z3]
 
 casos = []
+
 
 # ============= Questão 1. ============= 
 
@@ -30,6 +31,7 @@ for i in casos:
     del i # deleta cada caso
 
 casos.clear() # limpa o vetor de casos para a proxima questao
+
 
 # ============= Questão 2. =============
 #                                           ----- carga 1
@@ -63,7 +65,19 @@ modulo2 = np.abs(circuito_III)
 fase2 = np.angle(circuito_III, deg=True) 
 
 for i in casos:
-    i.salvar_dados_q2("dados_lista1_q2")
+    i.salvar_dados_q2("dados_lista1_q2.txt")
+
+for i in casos:
+    del i # deleta cada caso
+
+casos.clear() # limpa o vetor de casos para a proxima questao
+
+
+# ============= Questão 3. ============= 
+
+casos.append(Circuito3(fonte1= fontes[0], fonte2= fontes[2], linha1= linhas[0], linha2= linhas[1], carga= cargas[0], nome= "3."))
+casos[0].resolver_2fontes()
+casos[0].salvar_q3("dados_lista1_q3.txt")
 
 for i in casos:
     del i # deleta cada caso

@@ -34,6 +34,8 @@ class Circuito:
     def questao_2_cIII(cls, fonte, linha, carga1, carga2, carga3, nome):
         return cls(fonte, linha, [carga1, carga2, carga3], nome)
 
+    # "Construtor" para a Questão 2 (Circuito III)
+    
     def __del__(self):
         self._fonte = None
         self._imp_prop = None
@@ -186,6 +188,8 @@ class Circuito:
 
         return self._incognitas
 
+    
+    
     def tipos_parametros(self):
         print("\n============= Parâmetros do circuito =============")
         if np.array_equal(self._fonte, cte.FONTE1): print('A fonte do circuito é do tipo 1')
@@ -306,5 +310,96 @@ class Circuito:
                 f.write(f"Vbb':   {self._tensoes_linha[1]} = {modulo_l[1][0]:.4f} ∠ {fase_l[1][0]:.2f}°\n")
                 f.write(f"Vcc':   {self._tensoes_linha[2]} = {modulo_l[2][0]:.4f} ∠ {fase_l[2][0]:.2f}°\n")
                 f.write("\n")
+        except Exception as e:
+            print("Erro ao salvar o arquivo: ", e)
+
+
+
+class Circuito3: 
+    def __init__(self, fonte1, fonte2, linha1, linha2, carga, nome):
+        self._fonte1 = fonte1
+        self._fonte2 = fonte2
+        self._linha1 = linha1
+        self._linha2 = linha2
+        self._carga = carga
+        self._nome = nome
+
+        self._imp_prop1 = linha1.getImp_prop()
+        self._imp_mutua1 = linha1.getImp_mutua()
+        self._imp_prop2 = linha2.getImp_prop()
+        self._imp_mutua2 = linha2.getImp_mutua()
+        self._incognitas = None # calculada no resolver por I = Y * V
+        self._caracteristicas_rede = None # Matriz das impedâncias
+        self._valores_forcados = np.vstack([self._fonte1, [0], self._fonte2, [0]]) # Vetor com tensões provenientes da 2 Lei de Kirchhoff
+        self._tensoes_carga_fase = None
+        self._tensoes_linha = None
+
+    def resolver_2fontes(self):
+        self._caracteristicas_rede = np.array([ [self._imp_prop1 + self._carga, 0, 0, 1, -self._carga, 0, 0, 0], 
+                                                [0, self._imp_prop1 + self._carga, 0, 1, 0, -self._carga, 0, 0],
+                                                [0, 0, self._imp_prop1 + self._carga, 1, 0, 0, -self._carga, 0],
+                                                [1, 1, 1, 0, 0, 0, 0, 0], 
+                                                [self._carga, 0, 0, 0, self._imp_prop2 - self._carga, self._imp_mutua2, self._imp_mutua2, 0], 
+                                                [0, self._carga, 0, 0, self._imp_mutua2, self._imp_prop2 - self._carga, self._imp_mutua2, 0],
+                                                [0, 0, self._carga, 0, self._imp_mutua2, self._imp_mutua2, self._imp_prop2 - self._carga, 0],
+                                                [0, 0, 0, 0, 1, 1, 1, -1] ])
+        inversa = np.linalg.inv(self._caracteristicas_rede)
+        self._incognitas = np.dot(inversa, self._valores_forcados) # I = Y * V | I = [Ia, Ib, Ic, Vnn", Ia', Ib', Ic', In']
+        return self._incognitas
+    
+    def salvar_q3(self, arquivo):
+        try: 
+            with open(arquivo, "a", encoding="utf-8") as f:
+                f.write(f"============= QUESTÃO 03 =============\n")
+                
+                f.write("\nResultados:\n")
+                f.write("\n3.a\n")
+                circuito_3 = self._incognitas
+                modulo = np.abs(circuito_3)
+                fase = np.angle(circuito_3, deg=True)
+                f.write("Correntes na fonte 1:\n")
+                f.write(f"Ia:    {circuito_3[0]} = {modulo[0][0]:.4f} ∠ {fase[0][0]:.2f}°\n")
+                f.write(f"Ib:    {circuito_3[1]} = {modulo[1][0]:.4f} ∠ {fase[1][0]:.2f}°\n")
+                f.write(f"Ic:    {circuito_3[2]} = {modulo[2][0]:.4f} ∠ {fase[2][0]:.2f}°\n")
+                #f.write(f"Vn:    {circuito_3[3]} = {modulo[3][0]:.4f} ∠ {fase[3][0]:.2f}°")
+
+                f.write("Correntes na fonte 3:\n")
+                f.write(f"I'a:   {circuito_3[4]} = {modulo[4][0]:.4f} ∠ {fase[4][0]:.2f}°\n")
+                f.write(f"I'b:   {circuito_3[5]} = {modulo[5][0]:.4f} ∠ {fase[5][0]:.2f}°\n")
+                f.write(f"I'c:   {circuito_3[6]} = {modulo[6][0]:.4f} ∠ {fase[6][0]:.2f}°\n")
+                f.write(f"I'n:   {circuito_3[7]} = {modulo[7][0]:.4f} ∠ {fase[7][0]:.2f}°\n")
+
+                f.write("Correntes na carga:\n")
+                modulo_c = np.abs(circuito_3[0:3] - circuito_3[4:7])
+                fase_c = np.angle(circuito_3[0:3] - circuito_3[4:7], deg=True)
+                f.write(f"Ifa:   {circuito_3[0] - circuito_3[4]} = {modulo_c[0][0]:.4f} ∠ {fase_c[0][0]:.2f}°\n")
+                f.write(f"Ifb:   {circuito_3[1] - circuito_3[5]} = {modulo_c[1][0]:.4f} ∠ {fase_c[1][0]:.2f}°\n")
+                f.write(f"Ifc:   {circuito_3[2] - circuito_3[6]} = {modulo_c[2][0]:.4f} ∠ {fase_c[2][0]:.2f}°\n")
+                #f.write(f"I'n:   {circuito_3[7]} = {modulo_c[7][0]:.4f} ∠ {fase_c[7][0]:.2f}°\n")
+
+                f.write("\n3.b\n")
+                f.write("Quedas de tensão na linha 1:\n")
+                v1 = circuito_3[0:3] * self._imp_prop1
+                modulo_v1 = np.abs(v1)
+                fase_v1 = np.angle(v1, deg=True)
+                f.write(f"Vaa'':    |{v1[0]}| = {modulo_v1[0][0]:.4f} \n")
+                f.write(f"Vbb'':    |{v1[1]}| = {modulo_v1[1][0]:.4f} \n")
+                f.write(f"Vcc'':    |{v1[2]}| = {modulo_v1[2][0]:.4f} \n")
+
+                f.write("Quedas de tensão na linha 2:\n")
+                v2 = circuito_3[4:7] * (self._imp_prop2 - self._imp_mutua2)
+                modulo_v2 = np.abs(v1)
+                fase_v2 = np.angle(v1, deg=True)
+                f.write(f"Vaa'':    {v2[0]} = {modulo_v2[0][0]:.4f} \n")
+                f.write(f"Vbb'':    {v2[1]} = {modulo_v2[1][0]:.4f} \n")
+                f.write(f"Vcc'':    {v2[2]} = {modulo_v2[2][0]:.4f} \n")
+
+                f.write("\n3.c\n")
+                vc = (circuito_3[0:3] - circuito_3[4:7]) * self._carga
+                modulo_cv = np.abs(vc)
+                fase_cv = np.angle(vc, deg=True)
+                f.write(f"Vfa''n'':   {vc[0]} = {modulo_cv[0][0]:.4f} ∠ {fase_cv[0][0]:.2f}°\n")
+                f.write(f"Vfb''n'':   {vc[1]} = {modulo_cv[1][0]:.4f} ∠ {fase_cv[1][0]:.2f}°\n")
+                f.write(f"Vfc''n'':   {vc[2]} = {modulo_cv[2][0]:.4f} ∠ {fase_cv[2][0]:.2f}°\n")
         except Exception as e:
             print("Erro ao salvar o arquivo: ", e)
