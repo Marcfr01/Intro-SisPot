@@ -274,9 +274,9 @@ class Circuito:
                 if (self._imp_prop == cte.Z_P1): f.write(f'Linha: 1 | Z_p = {self._imp_prop} [Ω]\n')
                 elif (self._imp_prop == cte.Z_P2): f.write(f'Linha: 2 | Z_p = {self._imp_prop} [Ω] e Z_m = {self._imp_mutua} [Ω]\n')
 
-                if   (self._carga == cte.Z1): f.write(f'Carga : 1 | Z_f = {self._carga} [Ω]\n')
-                elif (self._carga == cte.Z2): f.write(f'Carga : 2 | Z_f = {self._carga} [Ω]\n')
-                elif (self._carga == cte.Z3): f.write(f'Carga : 3 | Z_f = {self._carga} [Ω]\n')
+                if (cte.Z1 in self._cargas): f.write(f'Carga : 1 | Z_f = {self._carga} [Ω]\n')
+                if (cte.Z2 in self._cargas): f.write(f'Carga : 2 | Z_f = {self._carga} [Ω]\n')
+                if (cte.Z3 in self._cargas): f.write(f'Carga : 3 | Z_f = {self._carga} [Ω]\n')
 
                 f.write("\nResultados:\n")
                 f.write("2a.\n")
