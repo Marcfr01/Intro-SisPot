@@ -122,28 +122,28 @@ class Circuito:
 
         # Linhas com mútuas
         elif self._nome == "G21": # Linha com mútua + carga trifásica em estrela não aterrada
-            self._linha_eq = self._imp_prop - self._imp_mutua
-            self._caracteristicas_rede = np.array([ [self._linha_eq + self._carga, 0, 0, 1],
-                                                    [0, self._linha_eq + self._carga, 0, 1],
-                                                    [0, 0, self._linha_eq + self._carga, 1],
+            #self._linha_eq = self._imp_prop - self._imp_mutua
+            self._caracteristicas_rede = np.array([ [self._imp_prop + self._carga, self._imp_mutua, self._imp_mutua, 1],
+                                                    [self._imp_mutua, self._imp_prop + self._carga, self._imp_mutua, 1],
+                                                    [self._imp_mutua, self._imp_mutua, self._imp_prop + self._carga, 1],
                                                     [1, 1, 1, 0] ])
             inversa = np.linalg.inv(self._caracteristicas_rede)
             self._incognitas = np.dot(inversa, self._valores_forcados) # I = Y * V | I = [Ia, Ib, Ic, Vnn']
 
         elif self._nome == "G22": # Linha com mútua + carga trifásica em estrela aterrada
-            self._linha_eq = self._imp_prop + (2* self._imp_mutua)
-            self._caracteristicas_rede = np.array([ [self._linha_eq + self._carga, 0, 0, 0],
-                                                    [0, self._linha_eq + self._carga, 0, 0],
-                                                    [0, 0, self._linha_eq + self._carga, 0],
+            #self._imp_prop = self._imp_prop + (2* self._imp_mutua)
+            self._caracteristicas_rede = np.array([ [self._imp_prop + self._carga, self._imp_mutua, self._imp_mutua, 0],
+                                                    [self._imp_mutua, self._imp_prop + self._carga, self._imp_mutua, 0],
+                                                    [self._imp_mutua, self._imp_mutua, self._imp_prop + self._carga, 0],
                                                     [1, 1, 1, -1] ])
             inversa = np.linalg.inv(self._caracteristicas_rede)
             self._incognitas = np.dot(inversa, self._valores_forcados) # I = Y * V | I = [Ia, Ib, Ic, In]
 
         elif self._nome == "G23": # Linha com mútua + carga trifásica em delta
-            self._linha_eq = self._imp_prop - self._imp_mutua
-            self._caracteristicas_rede = np.array([ [self._linha_eq + self._carga, 0, 0, 1],
-                                                    [0, self._linha_eq + self._carga, 0, 1],
-                                                    [0, 0, self._linha_eq + self._carga, 1],
+            #self._imp_prop = self._imp_prop - self._imp_mutua
+            self._caracteristicas_rede = np.array([ [self._imp_prop + self._carga, self._imp_mutua, self._imp_mutua, 1],
+                                                    [self._imp_mutua, self._imp_prop + self._carga, self._imp_mutua, 1],
+                                                    [self._imp_mutua, self._imp_mutua, self._imp_prop + self._carga, 1],
                                                     [1, 1, 1, 0] ])
             inversa = np.linalg.inv(self._caracteristicas_rede)
             self._incognitas = np.dot(inversa, self._valores_forcados) # I = Y * V | I = [Ia, Ib, Ic, Vnn']
