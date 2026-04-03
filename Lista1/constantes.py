@@ -61,8 +61,8 @@ Z_P1 = (0.15 + 1j*0.2) * L1
 #print()
 
 # Linha 2: mútuas iguais entre fases
-L2   = 4 
-Z_P2 = (0.15 + 1j*0.2) * L2
+L2 = 4.0
+Z_P2 = (0.2 + 1j*0.35) * L2
 Z_M2 = (0.09 * 1j) * L2
 #print(f'A distância da linha 2 é: {L2} [Km]')
 #print(f'A impedância própria da linha 2 é: {Z_P2} [Ω]')

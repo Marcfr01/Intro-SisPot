@@ -339,10 +339,11 @@ class Circuito3:
                                                 [0, self._imp_prop1 + self._carga, 0, 1, 0, -self._carga, 0, 0],
                                                 [0, 0, self._imp_prop1 + self._carga, 1, 0, 0, -self._carga, 0],
                                                 [1, 1, 1, 0, 0, 0, 0, 0], 
-                                                [self._carga, 0, 0, 0, self._imp_prop2 - self._carga, self._imp_mutua2, self._imp_mutua2, 0], 
-                                                [0, self._carga, 0, 0, self._imp_mutua2, self._imp_prop2 - self._carga, self._imp_mutua2, 0],
-                                                [0, 0, self._carga, 0, self._imp_mutua2, self._imp_mutua2, self._imp_prop2 - self._carga, 0],
+                                                [-self._carga, 0, 0, 1, self._imp_prop2 + self._carga, self._imp_mutua2, self._imp_mutua2, 0], 
+                                                [0, -self._carga, 0, 1, self._imp_mutua2, self._imp_prop2 + self._carga, self._imp_mutua2, 0],
+                                                [0, 0, -self._carga, 1, self._imp_mutua2, self._imp_mutua2, self._imp_prop2 + self._carga, 0],
                                                 [0, 0, 0, 0, 1, 1, 1, -1] ])
+        self._valores_forcados[4:8] = self._valores_forcados[4:8] * (-1)
         inversa = np.linalg.inv(self._caracteristicas_rede)
         self._incognitas = np.dot(inversa, self._valores_forcados) # I = Y * V | I = [Ia, Ib, Ic, Vnn", Ia', Ib', Ic', In']
         return self._incognitas
@@ -387,8 +388,12 @@ class Circuito3:
                 f.write(f"Vcc'':    |{v1[2]}| = {modulo_v1[2][0]:.4f} \n")
 
                 f.write("Quedas de tensão na linha 2:\n")
-                v2 = circuito_3[4:7] * (self._imp_prop2 - self._imp_mutua2)
-                modulo_v2 = np.abs(v1)
+                IL2 = circuito_3[4:7]
+                Z_L2 = np.array([[self._imp_prop2,  self._imp_mutua2, self._imp_mutua2],
+                 [self._imp_mutua2, self._imp_prop2,  self._imp_mutua2],
+                 [self._imp_mutua2, self._imp_mutua2, self._imp_prop2 ]])
+                v2 = Z_L2 @ IL2
+                modulo_v2 = np.abs(v2)
                 f.write(f"Vaa'':    {v2[0]} = {modulo_v2[0][0]:.4f} \n")
                 f.write(f"Vbb'':    {v2[1]} = {modulo_v2[1][0]:.4f} \n")
                 f.write(f"Vcc'':    {v2[2]} = {modulo_v2[2][0]:.4f} \n")
