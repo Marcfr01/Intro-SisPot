@@ -20,12 +20,13 @@ casos = []
 # ============= Questão 1. ============= 
 
 for fonte, linha, carga in product(fontes, linhas, cargas):
-    c = Circuito.questao_1(fonte= fonte, linha= linha, carga= carga, nome= f"G{linhas.index(linha) + 1}{cargas.index(carga) + 1}")
+    # Criados circuitos para cada combinação de fonte, linha e carga, nomeados de acordo com o grupo a que pertencem 
+    c = Circuito.questao_1(fonte= fonte, linha= linha, carga= carga, nome= f"G{linhas.index(linha) + 1}{cargas.index(carga) + 1}") 
     casos.append(c)
 
 for i in casos:
     i.resolver_circuito()
-    i.salvar_dados_q1("dados_lista1.txt")
+    i.salvar_dados_q1("dados_lista1_q1.txt")
 
 for i in casos: 
     del i # deleta cada caso
