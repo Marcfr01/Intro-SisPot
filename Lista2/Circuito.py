@@ -41,6 +41,14 @@ class Circuito:
         carga_c = carga.get_Zc()
         carga_at = carga.get_Zat()
         return cls(fonte, linha, [carga_a, carga_b, carga_c, carga_at], nome)
+    
+    @classmethod
+    def questao_4(cls, fonte, linha, carga, nome):
+        Van = fonte.get_V_an()
+        Vbn = fonte.get_V_bn()
+        Vcn = fonte.get_V_cn()
+        fonte_vec = np.array([[Van], [Vbn], [Vcn]])
+        return cls(fonte_vec, linha, [carga], nome)
 
     def __del__(self):
         self._fonte = None
@@ -127,7 +135,7 @@ class Circuito:
 
         if self._nome == "1.I": self._Z_carga_eq = self._carga
         elif self._nome == "1.II": self._Z_carga_eq = self._carga/2
-        elif self._nome in ["2.I", "2.II", "2.III"]: self._Z_carga_eq = self._carga
+        elif self._nome in ["2.I", "2.II", "2.III", '4.I']: self._Z_carga_eq = self._carga
 
         if self._nome in ["3.I", "3.II"]: 
             Za, Zb, Zc, Zat = self._cargas
@@ -259,6 +267,8 @@ class Circuito:
 
             elif self._nome in ["3.I", "3.II"]: self._tensoes_linha = self._incognitas[:3] * (self._imp_prop - self._imp_mutua) # Vaa' = Ia * (Zf - Zm) : carga desequilibrada
 
+            elif self._nome == "4.I": self._tensoes_linha = self._incognitas * self._imp_prop # Vaa' = Ia * Zf : carga desequilibrada
+
             return self._tensoes_linha
 
     def get_tensoes_fase(self):
@@ -318,7 +328,19 @@ class Circuito:
         
         return self._incognitas
             
-    
+    # ============================================================
+    # Métodos para a Questão 4.
+    def correntes_linha4(self):
+        if self._nome == "4.I":
+            Z_eq = self._imp_prop + self._carga
+            self._caracteristicas_rede = np.array([ [Z_eq, 0   , 0   , 1],
+                                                    [ 0  , Z_eq, 0   , 1],
+                                                    [ 0  , 0   , Z_eq, 1],
+                                                    [ 1  , 1   , 1   , 0] ])
+            inversa = np.linalg.inv(self._caracteristicas_rede)
+            self._incognitas = np.dot(inversa, self._valores_forcados) # I = Y * V | I = [Ia, Ib, Ic, Vnn']
+
+        return self._incognitas
     
     def resolver_circuito(self):
         #Linhas sem mutuas

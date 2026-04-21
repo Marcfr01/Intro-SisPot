@@ -48,6 +48,7 @@ Z2 = 12 - 4 *1j #[Ω]
 # Carga 3: ligação delta
 Z3 = 20 / 3 # transformado em estrela
 
+# Questão 3: Impedância desequilibrada
 class Impedancia_desequilibrada:
     def __init__(self, Za, Zb, Zc, Zat):
         self._Za = Za
@@ -68,3 +69,23 @@ class Impedancia_desequilibrada:
         return self._Zat
 
 Z4 = Impedancia_desequilibrada(20+10j, 20, 10-20j, 0.1+10j)
+
+# Questão 4: Fonte desequilibrada
+class Fonte_desequilibrada:
+    def __init__(self, V_an, V_bn, V_cn):
+        self._V_an = V_an
+        self._V_bn = V_bn
+        self._V_cn = V_cn
+
+    def get_V_an(self):
+        return self._V_an
+    
+    def get_V_bn(self):
+        return self._V_bn
+    
+    def get_V_cn(self):
+        return self._V_cn
+
+FONTE4 = Fonte_desequilibrada(complex(6000 * np.cos(np.deg2rad(0)), 6000 * np.sin(np.deg2rad(0))),
+                         complex(6600 * np.cos(np.deg2rad(90)),  6600 * np.sin(np.deg2rad(90))),
+                         complex(8000 * np.cos(np.deg2rad(-90)), 8000 * np.sin(np.deg2rad(-90))))

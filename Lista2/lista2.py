@@ -10,7 +10,7 @@ linha1 = Linha(cte.L1, cte.Z_P1, None)
 linha2 = Linha(cte.L2, cte.Z_P2, cte.Z_M2)
 
 # Instancia os circuitos com base nos grupos definidos anteriormente
-fontes = [cte.FONTE1, cte.FONTE2, cte.FONTE3]
+fontes = [cte.FONTE1, cte.FONTE2, cte.FONTE3, cte.FONTE4]
 linhas = [linha1, linha2]
 cargas = [cte.Z1, cte.Z2, cte.Z3, cte.Z4]
 
@@ -201,7 +201,7 @@ for i in casos:
 
 casos.clear() # limpa o vetor de casos para a proxima questao
 
-'''
+
 
 # ============= Questão 3. =============
 
@@ -274,4 +274,42 @@ print("=====================================================\n")
 for i in casos: 
     del i # deleta cada caso
 
-casos.clear() # limpa o vetor de casos para a proxima questao
+casos.clear() # limpa o vetor de casos para a proxima questao'''
+
+# ============= Questão 4. =============
+
+casos.append(Circuito.questao_4(fonte= fontes[3], linha= linhas[0], carga= cargas[2], nome= "4.I"))
+circuito4I = casos[0].correntes_linha4()
+modulo4I = np.abs(circuito4I)
+fase4I = np.angle(circuito4I, deg=True)
+print("Questão 4.a")
+print(f"Circuito 4.I: Corrente na linha A : Módulo = {modulo4I[0][0]:.4f} A, Fase = {fase4I[0][0]:.2f}°")
+print(f"Circuito 4.I: Corrente na linha B : Módulo = {modulo4I[1][0]:.4f} A, Fase = {fase4I[1][0]:.2f}°")
+print(f"Circuito 4.I: Corrente na linha C : Módulo = {modulo4I[2][0]:.4f} A, Fase = {fase4I[2][0]:.2f}°")
+print(f"Circuito 4.I: Tensão de deslocamento : Módulo = {modulo4I[3][0]:.4f} A, Fase = {fase4I[3][0]:.2f}°\n")
+
+T4I = casos[0].get_tensoes_fase()
+moduloT4I = np.abs(T4I)
+faseT4I = np.angle(T4I, deg=True)
+print("Questão 4.b")
+print(f"Circuito 4.I: Tensão na carga A  : Módulo = {moduloT4I[0][0]/1000:.4f} kV, Fase = {faseT4I[0][0]:.2f}°")
+print(f"Circuito 4.I: Tensão na carga B  : Módulo = {moduloT4I[1][0]/1000:.4f} kV, Fase = {faseT4I[1][0]:.2f}°")
+print(f"Circuito 4.I: Tensão na carga C  : Módulo = {moduloT4I[2][0]/1000:.4f} kV, Fase = {faseT4I[2][0]:.2f}°\n")
+
+Sf4I = casos[0].get_potencia_fonte()
+moduloSf4I = np.abs(Sf4I)  
+faseSf4I = np.angle(Sf4I, deg=True)
+print("Questão 4.e")
+print(f"Circuito 4.I: Potência na fonte = {moduloSf4I[0][0]/1000:.4f} kVA, Fase = {faseSf4I[0][0]:.2f}°")
+print(f"Circuito 4.I: Potência na fonte = {moduloSf4I[1][0]/1000:.4f} kVA, Fase = {faseSf4I[1][0]:.2f}°")
+print(f"Circuito 4.I: Potência na fonte = {moduloSf4I[2][0]/1000:.4f} kVA, Fase = {faseSf4I[2][0]:.2f}°\n")
+
+Sc4I = casos[0].get_potencia_carga()
+moduloSc4I = np.abs(Sc4I)   
+faseSc4I = np.angle(Sc4I, deg=True)
+print("Questão 4.f")
+print(f"Circuito 4.I: Potência na carga = {moduloSc4I[0][0]/1000:.4f} kVA, Fase = {faseSc4I[0][0]:.2f}° | {Sc4I[0][0]/1000:.4f} kVA")
+print(f"Circuito 4.I: Potência na carga = {moduloSc4I[1][0]/1000:.4f} kVA, Fase = {faseSc4I[1][0]:.2f}° | {Sc4I[1][0]/1000:.4f} kVA")
+print(f"Circuito 4.I: Potência na carga = {moduloSc4I[2][0]/1000:.4f} kVA, Fase = {faseSc4I[2][0]:.2f}° | {Sc4I[2][0]/1000:.4f} kVA\n")
+
+print("=====================================================\n")
