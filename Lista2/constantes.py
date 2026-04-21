@@ -47,3 +47,24 @@ Z1 = 18 + 6 *1j #[Ω]
 Z2 = 12 - 4 *1j #[Ω]
 # Carga 3: ligação delta
 Z3 = 20 / 3 # transformado em estrela
+
+class Impedancia_desequilibrada:
+    def __init__(self, Za, Zb, Zc, Zat):
+        self._Za = Za
+        self._Zb = Zb
+        self._Zc = Zc
+        self._Zat = Zat
+
+    def get_Za(self):
+        return self._Za
+    
+    def get_Zb(self):
+        return self._Zb
+    
+    def get_Zc(self):
+        return self._Zc
+    
+    def get_Zat(self):
+        return self._Zat
+
+Z4 = Impedancia_desequilibrada(20+10j, 20, 10-20j, 0.1+10j)

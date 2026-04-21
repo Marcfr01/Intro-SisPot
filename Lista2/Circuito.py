@@ -34,6 +34,14 @@ class Circuito:
     def questao_2(cls, fonte, linha, carga1, nome):
         return cls(fonte, linha, [carga1], nome)
     
+    @classmethod
+    def questao_3(cls, fonte, linha, carga : cte.Impedancia_desequilibrada, nome):
+        carga_a = carga.get_Za()
+        carga_b = carga.get_Zb()
+        carga_c = carga.get_Zc()
+        carga_at = carga.get_Zat()
+        return cls(fonte, linha, [carga_a, carga_b, carga_c, carga_at], nome)
+
     def __del__(self):
         self._fonte = None
         self._imp_prop = None
@@ -73,6 +81,7 @@ class Circuito:
     def get_carga3(self):
         return self._carga3
     
+    # =============================================================
     # Métodos para a Questão 1.
     def get_potencia_fonte(self):
         if np.array_equal(self._incognitas, None): raise ValueError("Correntes da linha ainda não foram calculadas. Execute .resolver_circuito() primeiro")
@@ -118,6 +127,22 @@ class Circuito:
 
         if self._nome == "1.I": self._Z_carga_eq = self._carga
         elif self._nome == "1.II": self._Z_carga_eq = self._carga/2
+        elif self._nome in ["2.I", "2.II", "2.III"]: self._Z_carga_eq = self._carga
+
+        if self._nome in ["3.I", "3.II"]: 
+            Za, Zb, Zc, Zat = self._cargas
+            Ia = self._incognitas[0, 0]
+            Ib = self._incognitas[1, 0]
+            Ic = self._incognitas[2, 0]
+
+            # S = V * conj(I) = Z*I * conj(I) = Z * |I|²  (escalar)
+            Sa  = Za  * Ia  * np.conj(Ia)
+            Sb  = Zb  * Ib  * np.conj(Ib)
+            Sc  = Zc  * Ic  * np.conj(Ic)
+
+            # Retorna array (3,1) — mesma interface que os outros casos
+            self._potencia_carga = np.array([[Sa], [Sb], [Sc]])
+            return self._potencia_carga
 
         self._tensoes_carga_fase = self._incognitas[:3] * self._Z_carga_eq
         self._potencia_carga = self._tensoes_carga_fase * np.conj(self._incognitas[:3])
@@ -178,6 +203,7 @@ class Circuito:
 
         return perdas_fase, perda_total, correntes
     
+    # ============================================================
     # Métodos para a Questão 2.
     def correntes_linha2(self):
         valores_forcados = np.concatenate((self._valores_forcados[:1], self._valores_forcados[2:]))  # Exclui o 2º valor: Van, Vcn, 0
@@ -215,12 +241,11 @@ class Circuito:
                 [1   , 1   , -1]
             ], dtype=complex)
 
-            print(self._imp_prop, self._carga, Z_eq)
-
             inversa = np.linalg.inv(self._caracteristicas_rede)
             self._incognitas = np.dot(inversa, valores_forcados) # I = Y * V | I = [Ia, Ic, In]
             
         return self._incognitas
+    
     def get_tensoes_linha(self):
             if np.array_equal(self._incognitas, None): raise ValueError("Correntes da linha ainda não foram calculadas. Execute .resolver_circuito() primeiro")
 
@@ -232,14 +257,67 @@ class Circuito:
             elif self._nome == "2.II": self._tensoes_linha = self._incognitas[:3] * (self._imp_prop - self._imp_mutua) # Vaa' = Ia * (Zf - Zm) : carga não aterrada
             elif self._nome == "2.III": self._tensoes_linha = self._incognitas[:3] * (self._imp_prop - self._imp_mutua) # Vaa' = Ia * (Zf - Zm) : carga aterrada
 
+            elif self._nome in ["3.I", "3.II"]: self._tensoes_linha = self._incognitas[:3] * (self._imp_prop - self._imp_mutua) # Vaa' = Ia * (Zf - Zm) : carga desequilibrada
+
             return self._tensoes_linha
 
     def get_tensoes_fase(self):
         if np.array_equal(self._incognitas, None): raise ValueError("Correntes da linha ainda não foram calculadas. Execute .resolver_circuito() primeiro")
-        self._tensoes_carga_fase = self._incognitas[:3] * self._carga
+        if self._nome in ["3.I", "3.II"]:
+            Za, Zb, Zc, Zat = self._cargas
+            Ia = self._incognitas[0, 0]
+            Ib = self._incognitas[1, 0]
+            Ic = self._incognitas[2, 0]
+            Vnt = self._incognitas[3, 0]   # tensão do neutro em relação à terra
+
+            # Tensão em cada impedância de carga: V = Z * I (escalar por escalar)
+            Va = Za  * Ia
+            Vb = Zb  * Ib
+            Vc = Zc  * Ic
+            Vat = Zat * (Ia + Ib + Ic)    # = Vn't, confirmação
+
+            # Reconstrói array (4,1) para manter interface consistente com lista2.py
+            self._tensoes_carga_fase = np.array([[Va], [Vb], [Vc], [Vat]])
+
+        else: self._tensoes_carga_fase = self._incognitas[:3] * self._carga
 
         return self._tensoes_carga_fase
 
+    # ============================================================
+    # Métodos para a Questão 3.
+    def correntes_linha3(self):
+        if self._nome == "3.I":
+            Za, Zb, Zc, Zat = self._cargas
+            Zp = self._imp_prop
+            Zm = self._imp_mutua
+
+            self._caracteristicas_rede = np.array([ 
+                [Zp + Za,   Zm   ,   Zm   , Zat],
+                [  Zm   , Zp + Zb,   Zm   , Zat],
+                [  Zm   ,   Zm   , Zp + Zc, Zat],
+                [  1    ,   1    ,   1    , -1 ] 
+                ], dtype=complex)
+
+            inversa = np.linalg.inv(self._caracteristicas_rede)
+            self._incognitas = np.dot(inversa, self._valores_forcados) # I = Y * V | I = [Ia, Ib, Ic, Vnn']
+
+        elif self._nome == "3.II":
+            Za, Zb, Zc, Zat = self._cargas
+            Zp = self._imp_prop
+            Zm = self._imp_mutua
+
+            self._caracteristicas_rede = np.array([ 
+                [Zp + Za,   Zm   ,   Zm   , Zat],
+                [  Zm   , Zp + Zb,   Zm   , Zat],
+                [  Zm   ,   Zm   , Zp + Zc, Zat],
+                [  1    ,   1    ,   1    , -1 ] 
+                ], dtype=complex)
+
+            inversa = np.linalg.inv(self._caracteristicas_rede)
+            self._incognitas = np.dot(inversa, self._valores_forcados) # I = Y * V | I = [Ia, Ib, Ic, In]
+        
+        return self._incognitas
+            
     
     
     def resolver_circuito(self):
