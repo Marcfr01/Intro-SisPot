@@ -268,3 +268,10 @@ faseSc3II = np.angle(Sc3II, deg=True)
 print(f"Circuito 3.II: Potência na carga = {moduloSc3II[0][0]/1000:.4f} kVA, Fase = {faseSc3II[0][0]:.2f}° | {Sc3II[0][0]/1000:.4f} kVA")
 print(f"Circuito 3.II: Potência na carga = {moduloSc3II[1][0]/1000:.4f} kVA, Fase = {faseSc3II[1][0]:.2f}° | {Sc3II[1][0]/1000:.4f} kVA")
 print(f"Circuito 3.II: Potência na carga = {moduloSc3II[2][0]/1000:.4f} kVA, Fase = {faseSc3II[2][0]:.2f}° | {Sc3II[2][0]/1000:.4f} kVA\n")
+
+print("=====================================================\n")
+
+for i in casos: 
+    del i # deleta cada caso
+
+casos.clear() # limpa o vetor de casos para a proxima questao
