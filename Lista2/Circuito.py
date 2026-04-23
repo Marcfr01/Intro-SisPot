@@ -332,6 +332,12 @@ class Circuito:
     # Métodos para a Questão 4.
     def correntes_linha4(self):
         if self._nome == "4.I":
+            print(f"Z_carga = {self._carga}")
+            mod = np.abs(self._valores_forcados)
+            pha = np.angle(self._valores_forcados, deg=True)
+            print(f"Modulo: {mod[0][0]} ∠ {pha[0][0]:.2f}°")
+            print(f"Modulo: {mod[1][0]} ∠ {pha[1][0]:.2f}°")
+            print(f"Modulo: {mod[2][0]} ∠ {pha[2][0]:.2f}°")
             Z_eq = self._imp_prop + self._carga
             self._caracteristicas_rede = np.array([ [Z_eq, 0   , 0   , 1],
                                                     [ 0  , Z_eq, 0   , 1],

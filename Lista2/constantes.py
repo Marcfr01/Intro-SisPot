@@ -87,5 +87,5 @@ class Fonte_desequilibrada:
         return self._V_cn
 
 FONTE4 = Fonte_desequilibrada(complex(6000 * np.cos(np.deg2rad(0)), 6000 * np.sin(np.deg2rad(0))),
-                         complex(6600 * np.cos(np.deg2rad(90)),  6600 * np.sin(np.deg2rad(90))),
+                         complex(6000 * np.cos(np.deg2rad(90)),  6000 * np.sin(np.deg2rad(90))),
                          complex(8000 * np.cos(np.deg2rad(-90)), 8000 * np.sin(np.deg2rad(-90))))

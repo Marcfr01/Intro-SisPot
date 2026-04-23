@@ -242,6 +242,7 @@ casos.append(Circuito.questao_3(fonte= fontes[1], linha= linhas[1], carga= carga
 circuito3II = casos[1].correntes_linha3()
 modulo3II = np.abs(circuito3II)
 fase3II = np.angle(circuito3II, deg=True)
+print("Questão 3.a")
 print(f"Circuito 3.II: Corrente na linha A     : Módulo = {modulo3II[0][0]:.4f} A, Fase = {fase3II[0][0]:.2f}°")
 print(f"Circuito 3.II: Corrente na linha B     : Módulo = {modulo3II[1][0]:.4f} A, Fase = {fase3II[1][0]:.2f}°")
 print(f"Circuito 3.II: Corrente na linha C     : Módulo = {modulo3II[2][0]:.4f} A, Fase = {fase3II[2][0]:.2f}°")
@@ -250,11 +251,13 @@ print(f"Circuito 3.II: Corrente de aterramento : Módulo = {modulo3II[3][0]:.4f}
 T3II = casos[1].get_tensoes_fase()
 moduloT3II = np.abs(T3II)
 faseT3II = np.angle(T3II, deg=True)
+print("Questão 3.b")
 print(f"Circuito 3.II: Tensão na carga A  : Módulo = {moduloT3II[0][0]/1000:.4f} kV, Fase = {faseT3II[0][0]:.2f}°")
 print(f"Circuito 3.II: Tensão na carga B  : Módulo = {moduloT3II[1][0]/1000:.4f} kV, Fase = {faseT3II[1][0]:.2f}°")
 print(f"Circuito 3.II: Tensão na carga C  : Módulo = {moduloT3II[2][0]/1000:.4f} kV, Fase = {faseT3II[2][0]:.2f}°")
 print(f"Circuito 3.II: Tensão de aterramento : Módulo = {moduloT3II[3][0]:.4f} kV, Fase = {faseT3II[3][0]:.2f}°\n")
 
+print("Questão 3.e")
 Sf3II = casos[1].get_potencia_fonte()
 moduloSf3II = np.abs(Sf3II)
 faseSf3II = np.angle(Sf3II, deg=True)
@@ -262,6 +265,7 @@ print(f"Circuito 3.II: Potência na fonte = {moduloSf3II[0][0]/1000:.4f} kVA, Fa
 print(f"Circuito 3.II: Potência na fonte = {moduloSf3II[1][0]/1000:.4f} kVA, Fase = {faseSf3II[1][0]:.2f}°")
 print(f"Circuito 3.II: Potência na fonte = {moduloSf3II[2][0]/1000:.4f} kVA, Fase = {faseSf3II[2][0]:.2f}°\n")
 
+print("Questão 3.f")
 Sc3II = casos[1].get_potencia_carga()
 moduloSc3II = np.abs(Sc3II)
 faseSc3II = np.angle(Sc3II, deg=True)
@@ -274,10 +278,10 @@ print("=====================================================\n")
 for i in casos: 
     del i # deleta cada caso
 
-casos.clear() # limpa o vetor de casos para a proxima questao'''
+casos.clear() # limpa o vetor de casos para a proxima questao
+
 
 # ============= Questão 4. =============
-
 casos.append(Circuito.questao_4(fonte= fontes[3], linha= linhas[0], carga= cargas[2], nome= "4.I"))
 circuito4I = casos[0].correntes_linha4()
 modulo4I = np.abs(circuito4I)
@@ -312,4 +316,6 @@ print(f"Circuito 4.I: Potência na carga = {moduloSc4I[0][0]/1000:.4f} kVA, Fase
 print(f"Circuito 4.I: Potência na carga = {moduloSc4I[1][0]/1000:.4f} kVA, Fase = {faseSc4I[1][0]:.2f}° | {Sc4I[1][0]/1000:.4f} kVA")
 print(f"Circuito 4.I: Potência na carga = {moduloSc4I[2][0]/1000:.4f} kVA, Fase = {faseSc4I[2][0]:.2f}° | {Sc4I[2][0]/1000:.4f} kVA\n")
 
-print("=====================================================\n")
+print("=====================================================\n")'''
+
+print((23.54**2)*(16.32+10.11j))
